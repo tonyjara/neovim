@@ -6,7 +6,6 @@ return {
 	config = function()
 		local builtin = require("telescope.builtin")
 
-		require("telescope").load_extension("notify")
 		vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find files" })
 		vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
 		vim.keymap.set("n", "<leader>fy", builtin.search_history, {})
@@ -20,7 +19,7 @@ return {
 				file_ignore_patterns = {
 					"node_modules",
 					"build",
-					"dist",
+					-- dist",
 					"yarn.lock",
 					"pnpm.lock",
 					"package-lock",
@@ -40,6 +39,8 @@ return {
 				},
 			},
 		})
+
 		require("telescope").load_extension("fzf")
+		require("telescope").load_extension("notify")
 	end,
 }

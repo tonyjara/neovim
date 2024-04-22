@@ -21,26 +21,18 @@ return {
 				graphql = { { "prettier" } },
 				md = { { "prettier" } },
 				txt = { { "prettier" } },
-				-- Use the "*" filetype to run formatters on all files.
-				-- Note that if you use this, you may want to set lsp_fallback = "always"
-				-- (see :help conform.format)
-				--[[ ["*"] = { "trim_whitespace" }, ]]
 			},
-			-- If this is set, Conform will run the formatter on save.
-			-- It will pass the table to conform.format().
-			format_on_save = {
-				-- I recommend these options. See :help conform.format for details.
-				lsp_fallback = true,
-				timeout_ms = 500,
-			},
-			-- If this is set, Conform will run the formatter asynchronously after save.
-			-- It will pass the table to conform.format().
+			format_on_save = function(bufnr)
+				-- Disable with a global or buffer-local variable
+				if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+					return
+				end
+				return { timeout_ms = 500, lsp_fallback = true }
+			end,
 			format_after_save = {
 				lsp_fallback = true,
 			},
-			-- Set the log level. Use `:ConformInfo` to see the location of the log file.
 			log_level = vim.log.levels.ERROR,
-			-- Conform will notify you when a formatter errors
 			notify_on_error = true,
 		})
 	end,
