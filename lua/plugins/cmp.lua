@@ -8,6 +8,7 @@ return {
 		"saadparwaiz1/cmp_luasnip", -- for autocompletion
 		"rafamadriz/friendly-snippets", -- useful snippets
 		"onsails/lspkind.nvim", -- vs-code like pictograms
+		-- "zbirenbaum/copilot-cmp",
 	},
 	config = function()
 		local cmp = require("cmp")
@@ -31,6 +32,8 @@ return {
 			sources = cmp.config.sources({
 				-- ORDER MATTERS HERE
 				-- Other options are keyword_length and priority, length is to specify when cmp should begin
+
+				-- { name = "copilot", group_index = 2 },
 				{ name = "luasnip", max_item_count = 2 },
 				{ name = "nvim_lua", max_item_count = 5 },
 				{ name = "nvim_lsp", max_item_count = 80 },

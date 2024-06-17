@@ -61,11 +61,42 @@ return {
 		local HEIGHT_RATIO = 0.8 -- You can change this
 		local WIDTH_RATIO = 0.5 -- You can change this too
 
-		require("nvim-tree").setup({
+		local floatView = {
+			float = {
+				enable = true,
+				open_win_config = function()
+					local screen_w = vim.opt.columns:get()
+					local screen_h = vim.opt.lines:get() - vim.opt.cmdheight:get()
+					local window_w = screen_w * WIDTH_RATIO
+					local window_h = screen_h * HEIGHT_RATIO
+					local window_w_int = math.floor(window_w)
+					local window_h_int = math.floor(window_h)
+					local center_x = (screen_w - window_w) / 2
+					local center_y = ((vim.opt.lines:get() - window_h) / 2) - vim.opt.cmdheight:get()
+					return {
+						border = "rounded",
+						relative = "editor",
+						row = center_y,
+						col = center_x,
+						width = window_w_int,
+						height = window_h_int,
+					}
+				end,
+			},
+			width = function()
+				return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
+			end,
+		}
+
+		local setup = {
+			--rooter
+			sync_root_with_cwd = true,
+			respect_buf_cwd = true,
 			sort_by = "case_sensitive",
 			renderer = {
 				group_empty = true,
 			},
+			--rooter
 			on_attach = my_on_attach,
 			diagnostics = {
 				enable = true,
@@ -79,6 +110,7 @@ return {
 			update_focused_file = {
 				enable = true,
 				update_cwd = true,
+				update_root = true,
 				ignore_list = {},
 			},
 			filters = {
@@ -90,38 +122,29 @@ return {
 				ignore = false,
 				timeout = 500,
 			},
-			view = {
-				float = {
-					enable = true,
-					open_win_config = function()
-						local screen_w = vim.opt.columns:get()
-						local screen_h = vim.opt.lines:get() - vim.opt.cmdheight:get()
-						local window_w = screen_w * WIDTH_RATIO
-						local window_h = screen_h * HEIGHT_RATIO
-						local window_w_int = math.floor(window_w)
-						local window_h_int = math.floor(window_h)
-						local center_x = (screen_w - window_w) / 2
-						local center_y = ((vim.opt.lines:get() - window_h) / 2) - vim.opt.cmdheight:get()
-						return {
-							border = "rounded",
-							relative = "editor",
-							row = center_y,
-							col = center_x,
-							width = window_w_int,
-							height = window_h_int,
-						}
-					end,
-				},
-				width = function()
-					return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
-				end,
-				-- width = 50,
-			},
-		})
+		}
+
+		local nvimtree = require("nvim-tree")
+		setup.view = floatView
+		nvimtree.setup(setup)
 
 		local opts = { noremap = true, silent = true }
 		vim.keymap.set("n", "<leader>bb", "<cmd>NvimTreeToggle<CR>", opts)
+		vim.keymap.set("n", "<leader>br", function()
+			setup.view = floatView
+			nvimtree.setup(setup)
+			vim.cmd("NvimTreeToggle")
+		end, { noremap = true, silent = true, desc = "File tree position reset" })
 		vim.keymap.set("n", "<leader>bf", "<cmd>NvimTreeFindFile<CR>", opts)
+		vim.keymap.set("n", "<leader>bl", function()
+			-- vim.cmd("vnew | wincmd H | 40 wincmd |")
+			-- require("nvim-tree.api").tree.open({ winid = vim.api.nvim_get_current_win() })
+			setup.view = {
+				width = 50,
+			}
+			nvimtree.setup(setup)
+			vim.cmd("NvimTreeToggle")
+		end, { noremap = true, silent = true, desc = "Open tree left" })
 		vim.keymap.set("n", "<leader>cc", "<cmd>NvimTreeCollapse<CR>", opts)
 	end,
 }
