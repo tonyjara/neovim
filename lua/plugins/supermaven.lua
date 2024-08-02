@@ -16,5 +16,7 @@ return {
 			disable_inline_completion = false, -- disables inline completion for use with cmp
 			disable_keymaps = false, -- disables built in
 		})
+		vim.keymap.set("n", "<leader>smt", "<cmd>SupermavenToggle<CR>", { desc = "SuperMaven Toggle" })
+		vim.keymap.set("n", "<leader>sms", "<cmd>SupermavenStop<CR>", { desc = "SuperMaven Stop" })
 	end,
 }
