@@ -37,7 +37,7 @@ return {
 		local keymap = vim.keymap
 		local opts = { noremap = true, silent = true }
 
-		local on_attach = function(client, bufnr)
+		local on_attach = function(_, bufnr)
 			-- if client.server_capabilities.documentSymbolProvider then
 			--     breadcrumb.attach(client, bufnr)
 			-- end
@@ -147,7 +147,7 @@ return {
 			},
 		})
 
-		lspconfig["tsserver"].setup({
+		lspconfig["ts_ls"].setup({
 			capabilities = capabilities,
 			on_attach = on_attach,
 		})
