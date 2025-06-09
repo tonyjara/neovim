@@ -55,7 +55,7 @@ return {
 				--     prefix = "",
 				-- },
 				float = {
-					source = "always",
+					source = true,
 					relative = "cursor",
 					row = line + 1,
 					col = col + 1,
@@ -164,12 +164,23 @@ return {
 			on_attach = on_attach,
 			capabilities = capabilities,
 		})
+
+		lspconfig["taplo"].setup({
+			on_attach = on_attach,
+			capabilities = capabilities,
+		})
+
 		lspconfig["dockerls"].setup({
 			on_attach = on_attach,
 			capabilities = capabilities,
 		})
 		-- configure css server
 		lspconfig["cssls"].setup({
+			capabilities = capabilities,
+			on_attach = on_attach,
+		})
+
+		lspconfig["lemminx"].setup({
 			capabilities = capabilities,
 			on_attach = on_attach,
 		})

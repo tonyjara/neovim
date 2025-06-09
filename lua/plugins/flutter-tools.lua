@@ -11,9 +11,10 @@ return {
 
 		-- flutter run -d web-server --web-port=3000
 
-		keymap.set({ "n", "v" }, "<leader>rf", "<cmd>FlutterRun -d chrome --web-port=3000<CR>", opts)
-
+		keymap.set({ "n", "v" }, "<leader>rf", "<cmd>FlutterRun -d chrome --web-port=3002<CR>", opts)
+		opts.desc = "Flutter run chrome port 3002"
 		keymap.set({ "n", "v" }, "<leader>qf", "<cmd>FlutterQuit<CR>", opts)
+		opts.desc = "Flutter quit"
 		local on_attach = function(_, bufnr)
 			-- if client.server_capabilities.documentSymbolProvider then
 			--     breadcrumb.attach(client, bufnr)
