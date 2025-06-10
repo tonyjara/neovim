@@ -6,13 +6,17 @@ return {
 		-- add any opts here
 		-- for example
 		provider = "claude",
-		openai = {
-			endpoint = "https://api.anthropic.com/v1/messages",
-			model = "claude-3-5-sonnet-20241022", -- your desired model (or use gpt-4o, etc.)
-			timeout = 30000, -- timeout in milliseconds
-			temperature = 0, -- adjust if needed
-			max_tokens = 8192,
-			-- reasoning_effort = "high" -- only supported for reasoning models (o1, etc.)
+		providers = {
+			openai = {
+				endpoint = "https://api.anthropic.com/v1/messages",
+				model = "claude-3-5-sonnet-20241022", -- your desired model (or use gpt-4o, etc.)
+				timeout = 30000, -- timeout in milliseconds
+				max_tokens = 8192,
+				-- reasoning_effort = "high" -- only supported for reasoning models (o1, etc.)
+				extra_request_body = {
+					temperature = 0, -- adjust if needed
+				},
+			},
 		},
 		system_prompt = [[
 You are an excellent programming expert.
