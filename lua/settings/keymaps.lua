@@ -3,6 +3,19 @@ vim.g.mapleader = " " -- maps space to word leader, this needs to be here regard
 local map = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
+-- Diagnostics jump
+map("n", "<leader>ln",
+    function()
+        vim.diagnostic.jump({ count = 1, float = true })
+    end,
+    { desc = "Next diagnostic" })
+map("n", "<leader>lp",
+    function()
+        vim.diagnostic.jump({ count = -1, float = true })
+    end
+    , { desc = "Previous diagnostic" })
+
+
 -- Navigate start, end, top and bottom
 map("n", "L", "$", opts) --end
 map("n", "H", "^", opts) --start
@@ -22,13 +35,13 @@ map("i", "<C-s>", "<Esc><cmd>update<CR>") -- SAVES file
 
 --NORMAL MODE REBINDS
 -- Pane navigation
-map("n", "d", '"_d') -- delete without cutting
-map("n", "c", '"_c') -- change without cutting
+map("n", "d", '"_d')                 -- delete without cutting
+map("n", "c", '"_c')                 -- change without cutting
 map("n", "<C-s>", "<cmd>update<CR>") -- SAVES file
 
 --VISUAL MODE REBINDS
-map("v", "d", '"_d') -- delete without cutting
-map("v", "c", '"_c') -- delete without cutting
+map("v", "d", '"_d')                      -- delete without cutting
+map("v", "c", '"_c')                      -- delete without cutting
 map("v", "<C-s>", "<Esc><cmd>update<CR>") -- SAVES file
 
 -- PASTE REBINDS
@@ -42,10 +55,10 @@ map("n", "<leader>si{", "vi{:'<,'>sort<CR>", { noremap = true, silent = true, de
 
 -- Spell check zg add word to dictionary, zw remove word from dictionary or makes it incorrect
 map(
-	"n",
-	"<leader>sce",
-	"<cmd>:set spell spelllang=en_us<CR>",
-	{ noremap = true, silent = true, desc = "Spell check enable" }
+    "n",
+    "<leader>sce",
+    "<cmd>:set spell spelllang=en_us<CR>",
+    { noremap = true, silent = true, desc = "Spell check enable" }
 )
 map("n", "<leader>scd", "<cmd>:set nospell<CR>", { noremap = true, silent = true, desc = "Spell check disable" })
 

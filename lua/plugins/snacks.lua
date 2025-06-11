@@ -4,19 +4,30 @@ return {
     lazy = false,
     ---@type snacks.Config
     opts = {
-        -- dashboard = require("custom.dashboard"),
-        -- explorer = { enabled = true },
-        -- picker = { enabled = true },
         bigfile = { enabled = true },
         git = { enabled = true },
         gitbrowse = { enabled = true },
         lazygit = { enabled = true },
-        image = { enabled = true },
-        indent = { enabled = true },
-        input = { enabled = true },
+        image = {
+            enabled = true,
+            animate = {
+                enabled = false
+            },
+        },
+        indent = {
+            enabled = true,
+            animate = {
+                -- enabled = vim.fn.has("nvim-0.10") == 1,
+                enabled = false,
+                style = "out",
+                easing = "linear",
+                duration = {
+                    step = 0,  -- ms per step
+                    total = 0, -- maximum duration
+                },
+            },
+        },
         notifier = { enabled = true },
-        quickfile = { enabled = true },
-        scope = { enabled = true },
         scroll = {
             enabled = true,
             animate = {
@@ -24,27 +35,50 @@ return {
                 easing = "linear",
             },
         },
-        statuscolumn = { enabled = true },
         toggle = { enabled = true },
-        words = { enabled = true },
+        picker = { enabled = true },
+        dashboard = {
+            enabled = true,
+            preset = {
+                header = [[
+███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
+████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
+██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║
+██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║
+██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║
+╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
+            }
+
+
+        },
+        -- quickfile = { enabled = true },
+        -- scope = { enabled = true },
+        -- statuscolumn = { enabled = true },
     },
     keys = {
+        -- find
+        -- { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
+        { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
+        { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
+        { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
+        { "<leader>fg", function() Snacks.picker.grep() end, desc = "Grep Files" },
+        -- { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Git Files" },
+        { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
+        { "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent" },
 
+        -- notifications
         { "<leader>fn", function() Snacks.picker.notifications() end, desc = "Notification History", },
+
         -- Buffers
         { "∑", function() Snacks.bufdelete() end, desc = "Delete Buffer", },
         { "<leader>bk", function() Snacks.bufdelete.all() end, desc = "Delete Buffer", },
         -- -- git
 
-        { "<leader>bt", function() Snacks.git.blame_line() end, desc = "Blame Line toggle", },
         { "<leader>lg", function() Snacks.lazygit.open() end, desc = "Open Lazygit", },
+        { "<leader>bt", function() Snacks.git.blame_line() end, desc = "Blame Line toggle", },
         { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches", },
         { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log", },
-        --    { "<leader>gL", function() Snacks.picker.git_log_line() end, desc = "Git Log Line" },
         { "<leader>gs", function() Snacks.picker.git_status() end, desc = "Git Status", },
-        --    { "<leader>gS", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
-        --    { "<leader>gd", function() Snacks.picker.git_diff() end, desc = "Git Diff (Hunks)" },
-        --    { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
     },
     init = function()
         vim.api.nvim_create_autocmd("User", {

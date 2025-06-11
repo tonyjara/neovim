@@ -41,30 +41,13 @@ vim.opt.clipboard:append("unnamedplus") -- use system clipboard as default regis
 
 -- search settings
 vim.opt.ignorecase = true -- ignore case when searching
-vim.opt.smartcase = true -- if you include mixed case in your search, assumes you want case-sensitive
+vim.opt.smartcase = true  -- if you include mixed case in your search, assumes you want case-sensitive
 
 -- Get rid of ~ on the side
 vim.opt.fillchars = { eob = " " }
 
-vim.opt.fo:remove("c") -- Dont comment new lines after commented line
-vim.opt.fo:remove("r") -- Dont comment new lines after commented line
+vim.opt.fo:remove("c")     -- Dont comment new lines after commented line
+vim.opt.fo:remove("r")     -- Dont comment new lines after commented line
 vim.opt.fo:remove({ "o" }) -- Dont comment new lines after commented line
 
--- let s:hidden_all = 0
--- function! ToggleHiddenAll()
---     if s:hidden_all  == 0
---         let s:hidden_all = 1
---         set noshowmode
---         set noruler
---         set laststatus=0
---         set noshowcmd
---     else
---         let s:hidden_all = 0
---         set showmode
---         set ruler
---         set laststatus=2
---         set showcmd
---     endif
--- endfunction
---
--- nnoremap <S-h> :call ToggleHiddenAll()<CR>
+vim.opt.cmdheight = 0      -- removes pesky bottom line
