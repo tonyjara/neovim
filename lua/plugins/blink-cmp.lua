@@ -15,7 +15,12 @@ return {
             }, vim.bo.filetype) and vim.bo.buftype ~= "prompt" and vim.b.completion ~= false
         end,
         keymap = {
+
             preset = "enter",
+            -- ["<CR>"] = { "accept" },
+            ["<CR>"] = { "select_and_accept", 'fallback' },
+            -- ["<CR>"] = { "select_accept_and_enter" },
+            -- ["<CR>"] = { function(cmp) cmp.accept({ index = 1 }) end },
             ["<S-Tab>"] = {},
             ["<Tab>"] = {},
             ["<C-l>"] = { "snippet_forward", "fallback" },
@@ -48,7 +53,7 @@ return {
         },
 
         sources = {
-            default = { 'lsp', 'path', 'snippets', 'buffer' },
+            default = { 'snippets', 'lsp', 'path', 'buffer' },
         },
 
         fuzzy = { implementation = "prefer_rust_with_warning" }

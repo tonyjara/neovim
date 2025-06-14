@@ -8,16 +8,9 @@ return {
         git = { enabled = true },
         gitbrowse = { enabled = true },
         lazygit = { enabled = true },
-        image = {
-            enabled = true,
-            animate = {
-                enabled = false
-            },
-        },
         indent = {
             enabled = true,
             animate = {
-                -- enabled = vim.fn.has("nvim-0.10") == 1,
                 enabled = false,
                 style = "out",
                 easing = "linear",
@@ -36,7 +29,10 @@ return {
             },
         },
         toggle = { enabled = true },
-        picker = { enabled = true },
+        picker = {
+            enabled = true,
+            matcher = { frecency = true }
+        },
         dashboard = {
             enabled = true,
             preset = {
@@ -51,34 +47,31 @@ return {
 
 
         },
-        -- quickfile = { enabled = true },
-        -- scope = { enabled = true },
-        -- statuscolumn = { enabled = true },
     },
     keys = {
         -- find
         -- { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
-        { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
+        { "<leader>fb", function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
         { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
-        { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
-        { "<leader>fg", function() Snacks.picker.grep() end, desc = "Grep Files" },
+        { "<leader>ff", function() Snacks.picker.files() end,                                   desc = "Find Files" },
+        { "<leader>fg", function() Snacks.picker.grep() end,                                    desc = "Grep Files" },
         -- { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Git Files" },
-        { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
-        { "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent" },
+        { "<leader>fp", function() Snacks.picker.projects() end,                                desc = "Projects" },
+        { "<leader>fr", function() Snacks.picker.recent() end,                                  desc = "Recent" },
 
         -- notifications
-        { "<leader>fn", function() Snacks.picker.notifications() end, desc = "Notification History", },
+        { "<leader>fn", function() Snacks.picker.notifications() end,                           desc = "Notification History", },
 
         -- Buffers
-        { "∑", function() Snacks.bufdelete() end, desc = "Delete Buffer", },
-        { "<leader>bk", function() Snacks.bufdelete.all() end, desc = "Delete Buffer", },
+        -- { "∑", function() Snacks.bufdelete() end, desc = "Delete Buffer", },
+        -- { "<leader>bk", function() Snacks.bufdelete.all() end, desc = "Delete Buffer", },
         -- -- git
 
-        { "<leader>lg", function() Snacks.lazygit.open() end, desc = "Open Lazygit", },
-        { "<leader>bt", function() Snacks.git.blame_line() end, desc = "Blame Line toggle", },
-        { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches", },
-        { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log", },
-        { "<leader>gs", function() Snacks.picker.git_status() end, desc = "Git Status", },
+        { "<leader>lg", function() Snacks.lazygit.open() end,                                   desc = "Open Lazygit", },
+        { "<leader>bt", function() Snacks.git.blame_line() end,                                 desc = "Blame Line toggle", },
+        { "<leader>gb", function() Snacks.picker.git_branches() end,                            desc = "Git Branches", },
+        { "<leader>gl", function() Snacks.picker.git_log() end,                                 desc = "Git Log", },
+        { "<leader>gs", function() Snacks.picker.git_status() end,                              desc = "Git Status", },
     },
     init = function()
         vim.api.nvim_create_autocmd("User", {
