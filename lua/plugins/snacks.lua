@@ -36,6 +36,17 @@ return {
         dashboard = {
             enabled = true,
             preset = {
+                keys = {
+                    { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+                    { icon = " ", key = "b", desc = "Open tree", action = ":NvimTreeToggle" },
+                    { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+                    { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
+                    { icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
+                    { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+                    -- { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+                    -- { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+                    -- { icon = " ", key = "s", desc = "Restore Session", section = "session" },
+                },
                 header = [[
 ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
 ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
@@ -55,17 +66,11 @@ return {
         { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
         { "<leader>ff", function() Snacks.picker.files() end,                                   desc = "Find Files" },
         { "<leader>fg", function() Snacks.picker.grep() end,                                    desc = "Grep Files" },
-        -- { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Git Files" },
         { "<leader>fp", function() Snacks.picker.projects() end,                                desc = "Projects" },
         { "<leader>fr", function() Snacks.picker.recent() end,                                  desc = "Recent" },
 
         -- notifications
         { "<leader>fn", function() Snacks.picker.notifications() end,                           desc = "Notification History", },
-
-        -- Buffers
-        -- { "∑", function() Snacks.bufdelete() end, desc = "Delete Buffer", },
-        -- { "<leader>bk", function() Snacks.bufdelete.all() end, desc = "Delete Buffer", },
-        -- -- git
 
         { "<leader>lg", function() Snacks.lazygit.open() end,                                   desc = "Open Lazygit", },
         { "<leader>bt", function() Snacks.git.blame_line() end,                                 desc = "Blame Line toggle", },
