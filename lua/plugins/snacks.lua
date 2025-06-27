@@ -7,7 +7,7 @@ return {
         bigfile = { enabled = true },
         git = { enabled = true },
         gitbrowse = { enabled = true },
-        lazygit = { enabled = true },
+        -- lazygit = { enabled = true },
         indent = {
             enabled = true,
             animate = {
@@ -29,15 +29,51 @@ return {
             },
         },
         toggle = { enabled = true },
-        picker = {
-            enabled = true,
-            matcher = { frecency = true }
-        },
+        -- picker = {
+        --     enabled = true,
+        --     matcher = { frecency = true },
+        --     ---@class snacks.picker.formatters.Config
+        --     formatters = {
+        --         file = {
+        --             filename_first = false,
+        --             truncate = 100,
+        --         }
+        --     },
+        --     sources = {
+        --
+        --         colorschemes = {
+        --             prompt = "󱥚 ",
+        --             layout = {
+        --                 preview = 'main',
+        --                 layout = {
+        --                     backdrop = false,
+        --                     row = 1,
+        --                     width = 0.4,
+        --                     min_width = 80,
+        --                     height = 0.8,
+        --                     border = "none",
+        --                     box = "vertical",
+        --                     {
+        --                         win = "input",
+        --                         height = 1,
+        --                         border = "single",
+        --                         title = "{title} {live} {flags}",
+        --                         title_pos = "center",
+        --                     },
+        --                     { win = "list",    border = "single" },
+        --                     { win = "preview", title = "{preview}", border = "single" },
+        --                 },
+        --             },
+        --         },
+        --     },
+        -- },
         dashboard = {
             enabled = true,
             preset = {
                 keys = {
-                    { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+                    { icon = " ", key = "f", desc = "Find File", action = ":Telescope find_files" },
+                    -- { icon = " ", key = "f", desc = "Find File", action = ":Telescope frecency workspace=CWD" },
+                    -- { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
                     { icon = " ", key = "b", desc = "Open tree", action = ":NvimTreeToggle" },
                     { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
                     { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
@@ -62,21 +98,22 @@ return {
     keys = {
         -- find
         -- { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },
-        { "<leader>fb", function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
-        { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
-        { "<leader>ff", function() Snacks.picker.files() end,                                   desc = "Find Files" },
-        { "<leader>fg", function() Snacks.picker.grep() end,                                    desc = "Grep Files" },
-        { "<leader>fp", function() Snacks.picker.projects() end,                                desc = "Projects" },
-        { "<leader>fr", function() Snacks.picker.recent() end,                                  desc = "Recent" },
+        -- { "<leader>fb", function() Snacks.picker.buffers() end,                                 desc = "Buffers" },
+        -- { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
+        -- { "<leader>ff", function() Snacks.picker.files() end,                                   desc = "Find Files" },
+        -- { "<leader>fg", function() Snacks.picker.grep() end,                                    desc = "Grep Files" },
+        -- { "<leader>fp", function() Snacks.picker.projects() end,                                desc = "Projects" },
+        -- { "<leader>fr", function() Snacks.picker.recent() end,                                  desc = "Recent" },
 
         -- notifications
-        { "<leader>fn", function() Snacks.picker.notifications() end,                           desc = "Notification History", },
+        { "<leader>fn", function() Snacks.picker.notifications() end, desc = "Notification History", },
+        -- { "<leader>fn", function() Snacks.picker.notifications() end, desc = "Notification History", },
 
-        { "<leader>lg", function() Snacks.lazygit.open() end,                                   desc = "Open Lazygit", },
-        { "<leader>bt", function() Snacks.git.blame_line() end,                                 desc = "Blame Line toggle", },
-        { "<leader>gb", function() Snacks.picker.git_branches() end,                            desc = "Git Branches", },
-        { "<leader>gl", function() Snacks.picker.git_log() end,                                 desc = "Git Log", },
-        { "<leader>gs", function() Snacks.picker.git_status() end,                              desc = "Git Status", },
+        -- { "<leader>lg", function() Snacks.lazygit.open() end,         desc = "Open Lazygit", },
+        { "<leader>bt", function() Snacks.git.blame_line() end,       desc = "Blame Line toggle", },
+        { "<leader>gb", function() Snacks.picker.git_branches() end,  desc = "Git Branches", },
+        { "<leader>gl", function() Snacks.picker.git_log() end,       desc = "Git Log", },
+        { "<leader>gs", function() Snacks.picker.git_status() end,    desc = "Git Status", },
     },
     init = function()
         vim.api.nvim_create_autocmd("User", {
