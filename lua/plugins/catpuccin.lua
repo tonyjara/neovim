@@ -80,7 +80,7 @@ return {
                 }, -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
             },
         })
-        -- vim.cmd.colorscheme("catppuccin")
+        vim.cmd.colorscheme("catppuccin")
     end,
 }
 -- setup must be called before loading

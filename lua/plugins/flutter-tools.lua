@@ -14,9 +14,9 @@ return {
         -- '<cmd>FlutterRun -d chrome --web-browser-flag=--disable-web-security --web-port=3002<CR>',
 
         keymap.set({ "n", "v" }, '<leader>rf',
-            '<cmd>FlutterRun -d web-server --web-port=3002<CR>',
+            '<cmd>FlutterRun -d web-server --web-port=3004<CR>',
             opts)
-        opts.desc = "Flutter run chrome port 3002"
+        opts.desc = "Flutter run chrome port 3004"
         keymap.set({ "n", "v" }, "<leader>qf", "<cmd>FlutterQuit<CR>", opts)
         opts.desc = "Flutter quit"
         local on_attach = function(_, bufnr)

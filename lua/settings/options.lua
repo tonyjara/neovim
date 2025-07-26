@@ -50,4 +50,4 @@ vim.opt.fo:remove("c")     -- Dont comment new lines after commented line
 vim.opt.fo:remove("r")     -- Dont comment new lines after commented line
 vim.opt.fo:remove({ "o" }) -- Dont comment new lines after commented line
 
-vim.opt.cmdheight = 0      -- removes pesky bottom line
+-- vim.opt.cmdheight = 0      -- removes pesky bottom line, but also adds a "press enter" prompt at the start
