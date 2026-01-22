@@ -1,27 +1,34 @@
+local root_markers1 = {
+	".emmyrc.json",
+	".luarc.json",
+	".luarc.jsonc",
+}
+local root_markers2 = {
+	".luacheckrc",
+	".stylua.toml",
+	"stylua.toml",
+	"selene.toml",
+	"selene.yml",
+}
+
 ---@type vim.lsp.Config
 return {
 	cmd = { "lua-language-server" },
-	root_markers = {
-		".luarc.json",
-		".luarc.jsonc",
-		".luacheckrc",
-		".stylua.toml",
-		"stylua.toml",
-		"selene.toml",
-		"selene.yml",
-		".git",
-	},
 	filetypes = { "lua" },
+	root_markers = vim.fn.has("nvim-0.11.3") == 1 and { root_markers1, root_markers2, { ".git" } }
+		or vim.list_extend(vim.list_extend(root_markers1, root_markers2), { ".git" }),
 	settings = {
 		Lua = {
-			completion = {
-				callSnippet = "Replace",
-			},
-			-- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+			codeLens = { enable = true },
+			hint = { enable = true, semicolon = "Disable" },
 			diagnostics = {
-				globals = { "nixCats", "dd", "bt" },
-				disable = { "missing-fields" },
+				globals = { "vim" },
 			},
+			workspace = {
+				library = vim.api.nvim_get_runtime_file("", true),
+				checkThirdParty = false,
+			},
+			telemetry = { enable = false },
 		},
 	},
 }
