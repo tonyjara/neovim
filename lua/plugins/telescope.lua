@@ -14,11 +14,7 @@ return {
 
 		require("telescope").setup({
 			defaults = {
-				path_display = {
-					filename_first = {
-						reverse_directories = true,
-					},
-				},
+				path_display = { "truncate" },
 
 				file_ignore_patterns = {
 					"node_modules",
