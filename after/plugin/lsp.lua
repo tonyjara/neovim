@@ -67,11 +67,13 @@ vim.lsp.config("*", {
 	),
 })
 
+vim.lsp.config("odoo_ls", dofile(vim.fn.stdpath("config") .. "/lsp/odoo_ls.lua"))
+
 vim.lsp.enable("lua_ls")
 vim.lsp.enable("cssls")
 vim.lsp.enable("ts_ls")
 vim.lsp.enable("tailwind")
-vim.lsp.enable("emmet")
+vim.lsp.enable("emmet_ls")
 vim.lsp.enable("pyright")
 vim.lsp.enable("nil_ls")
 vim.lsp.enable("eslint")
@@ -80,3 +82,4 @@ vim.lsp.enable("dockerls")
 vim.lsp.enable("yamlls")
 vim.lsp.enable("lemminx") -- xml
 vim.lsp.enable("taplo") -- toml
+vim.lsp.enable("odoo_ls")

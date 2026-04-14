@@ -8,14 +8,14 @@ return {
 	},
 	config = function()
 		---@type opencode.Opts
-		vim.g.opencode_opts = {
-			provider = {
-				enabled = "tmux",
-				tmux = {
-					options = "-h", -- Vertical split (use "-h" for horizontal)
-				},
-			},
-		}
+		-- vim.g.opencode_opts = {
+		-- provider = {
+		-- 	enabled = "tmux",
+		-- 	tmux = {
+		-- 		options = "-h", -- Vertical split (use "-h" for horizontal)
+		-- 	},
+		-- },
+		-- }
 
 		-- Required for `opts.events.reload`.
 		vim.o.autoread = true

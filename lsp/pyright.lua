@@ -22,11 +22,20 @@ local function set_python_path(command)
 	end
 end
 
----@type vim.lsp.Config
-return {
-	cmd = { "pyright-langserver", "--stdio" },
-	filetypes = { "python" },
-	root_markers = {
+local function resolve_root_dir(path_or_bufnr)
+	if type(path_or_bufnr) == "number" then
+		path_or_bufnr = vim.api.nvim_buf_get_name(path_or_bufnr)
+	end
+
+	if type(path_or_bufnr) ~= "string" or path_or_bufnr == "" then
+		return nil
+	end
+
+	if vim.fs.root(path_or_bufnr, "odools.toml") then
+		return nil
+	end
+
+	return vim.fs.root(path_or_bufnr, {
 		"pyrightconfig.json",
 		"pyproject.toml",
 		"setup.py",
@@ -34,7 +43,23 @@ return {
 		"requirements.txt",
 		"Pipfile",
 		".git",
-	},
+	})
+end
+
+local function root_dir(path_or_bufnr, on_dir)
+	local root = resolve_root_dir(path_or_bufnr)
+	if root and on_dir then
+		on_dir(root)
+	end
+
+	return root
+end
+
+---@type vim.lsp.Config
+return {
+	cmd = { "pyright-langserver", "--stdio" },
+	filetypes = { "python" },
+	root_dir = root_dir,
 	settings = {
 		python = {
 			analysis = {

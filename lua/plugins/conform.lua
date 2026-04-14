@@ -5,8 +5,8 @@ return {
 			-- Map of filetype to formatters
 			formatters_by_ft = {
 				-- lua = { "stylua" },
-				-- Conform will run multiple formatters sequentially
-				python = { "isort", "black" },
+				-- Match the workspace VSCode settings: no import reordering on save.
+				python = { "black" },
 				-- Use a sub-list to run only the first available formatter
 				javascript = { "prettier" },
 				typescript = { "prettier" },
@@ -27,7 +27,13 @@ return {
 				if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
 					return
 				end
-				return { timeout_ms = 500, lsp_fallback = true }
+
+				-- This workspace disables Python format-on-save in VSCode.
+				if vim.bo[bufnr].filetype == "python" then
+					return
+				end
+
+				return { timeout_ms = 3000, lsp_fallback = true }
 			end,
 			format_after_save = {
 				lsp_fallback = true,

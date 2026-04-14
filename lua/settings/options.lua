@@ -30,6 +30,7 @@ vim.o.termguicolors = true
 vim.opt.cursorline = true
 vim.opt.number = true
 
+vim.opt.timeoutlen = 300 -- reduce key sequence timeout (default 1000ms causes delays with which-key)
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
