@@ -1,0 +1,74 @@
+return {
+	-- "kais-radwan/ascii-mermaid",
+	-- ft = "markdown",
+	-- -- Note on width: diagrams are drawn as extmark virtual text, which Neovim
+	-- -- clips at the window edge rather than wrapping, and the renderer has no
+	-- -- max-width — ASCII art cannot reflow. Shrinking padding_x/padding_y does
+	-- -- not help (padding_y below 1 draws the arrows inside the box borders).
+	-- -- The only real lever is giving the window more text columns; see the
+	-- -- ProseWrap autocmd in lua/settings/autocmds.lua.
+	-- opts = {},
+	-- config = function(_, opts)
+	-- 	require("ascii-mermaid").setup(opts)
+	--
+	-- 	-- The engine renders eight diagram types. Anything else — xychart-beta,
+	-- 	-- journey, mindmap, quadrantChart, gitGraph, sankey, block-beta — falls
+	-- 	-- through to the flowchart parser and throws "Invalid mermaid header".
+	-- 	-- The plugin drops its cache entry whenever a render fails, so such a
+	-- 	-- block is retried, and the warning re-fired, on every CursorHold.
+	-- 	-- Filtering them out at detection time keeps them as ordinary fenced
+	-- 	-- code instead of a warning every half second.
+	-- 	local detect = require("ascii-mermaid.detect")
+	-- 	local find_blocks = detect.find_blocks
+	-- 	if type(find_blocks) ~= "function" then
+	-- 		return
+	-- 	end
+	--
+	-- 	-- Mirrors ts/src/ascii/index.ts detectDiagramType() and the header
+	-- 	-- checks in ts/src/parser.ts, including their handling of `;` as a line
+	-- 	-- separator and of blank / `%%` comment lines before the header.
+	-- 	local supported = {
+	-- 		"^sequencediagram$",
+	-- 		"^classdiagram$",
+	-- 		"^erdiagram$",
+	-- 		"^pie$",
+	-- 		"^pie%s",
+	-- 		"^timeline$",
+	-- 		"^timeline%s",
+	-- 		"^gantt$",
+	-- 		"^gantt%s",
+	-- 		"^statediagram$",
+	-- 		"^statediagram%-v2$",
+	-- 		"^graph%s+t[db]$",
+	-- 		"^graph%s+[lbr][rtl]$",
+	-- 		"^flowchart%s+t[db]$",
+	-- 		"^flowchart%s+[lbr][rtl]$",
+	-- 	}
+	--
+	-- 	local function renderable(content)
+	-- 		local header
+	-- 		for _, line in ipairs(vim.split(content, "[\n;]")) do
+	-- 			line = vim.trim(line)
+	-- 			if line ~= "" and line:sub(1, 2) ~= "%%" then
+	-- 				header = line:lower()
+	-- 				break
+	-- 			end
+	-- 		end
+	-- 		if not header then
+	-- 			return false
+	-- 		end
+	-- 		for _, pattern in ipairs(supported) do
+	-- 			if header:match(pattern) then
+	-- 				return true
+	-- 			end
+	-- 		end
+	-- 		return false
+	-- 	end
+	--
+	-- 	detect.find_blocks = function(bufnr)
+	-- 		return vim.tbl_filter(function(block)
+	-- 			return renderable(block.content)
+	-- 		end, find_blocks(bufnr))
+	-- 	end
+	-- end,
+}

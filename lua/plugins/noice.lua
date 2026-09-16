@@ -3,14 +3,19 @@ return {
     dependencies = {
         -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
         "MunifTanjim/nui.nvim",
-        -- OPTIONAL:
-        --   `nvim-notify` is only needed, if you want to use the notification view.
-        --   If not available, we use `mini` as the fallback
-
-        "rcarriga/nvim-notify",
+        -- No nvim-notify: snacks.notifier owns `vim.notify` (see `notify` below),
+        -- and noice's own `notify` view already prefers the snacks backend anyway.
     },
     config = function()
         require("noice").setup({
+            -- Let snacks.notifier own `vim.notify` rather than noice.
+            -- Noice's wrapper builds a fresh message per call and drops
+            -- `opts.id` / `opts.replace`, so plugins that animate a single toast
+            -- in place (package-info's version spinner, progress bars, ...) end up
+            -- emitting one notification per frame. snacks honors both, so those
+            -- update in place instead of stacking up.
+            -- Noice still handles cmdline, messages, popupmenu and LSP.
+            notify = { enabled = false },
             lsp = {
                 -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
                 override = {
@@ -29,9 +34,12 @@ return {
             },
         })
 
-        -- Keymap to dismiss noice notifications
+        -- Dismiss both: noice-routed messages and snacks notifications
         vim.keymap.set("n", "<Esc>", function()
             require("noice").cmd("dismiss")
-        end, { desc = "Dismiss noice notifications" })
+            if _G.Snacks then
+                Snacks.notifier.hide()
+            end
+        end, { desc = "Dismiss notifications" })
     end,
 }

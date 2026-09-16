@@ -63,10 +63,34 @@ return {
 		-- pcall(require("telescope").load_extension("notify"))
 		-- require("telescope").load_extension "file_browser"
 
+		-- ── Scope searches to extra-addons/ only inside the Odoocker repo ──
+		-- Walks up from the cwd looking for an `extra-addons/` directory. Any
+		-- project that has one (effectively just Odoocker) gets its searches
+		-- scoped to it; everywhere else this returns nil and Telescope behaves
+		-- exactly as before, so other projects are unaffected.
+		local function odoo_search_dirs()
+			local addons = vim.fs.find("extra-addons", {
+				upward = true,
+				type = "directory",
+				path = vim.fn.getcwd(),
+			})[1]
+			return addons and { addons } or nil
+		end
+
+		-- Merge search_dirs into a Telescope opts table when in the Odoocker repo.
+		local function scoped(opts)
+			opts = opts or {}
+			local search_dirs = odoo_search_dirs()
+			if search_dirs then
+				opts.search_dirs = search_dirs
+			end
+			return opts
+		end
+
 		-- Table to store the last search query
 		local last_search = {}
 		local function start_live_grep()
-			builtin.live_grep({
+			builtin.live_grep(scoped({
 				attach_mappings = function(_, map)
 					map("i", "<CR>", function(prompt_bufnr)
 						local action_state = require("telescope.actions.state")
@@ -81,15 +105,15 @@ return {
 					end)
 					return true
 				end,
-			})
+			}))
 		end
 
 		-- Function to resume the last live_grep search
 		local function resume_live_grep()
 			if last_search.query then
-				builtin.live_grep({
+				builtin.live_grep(scoped({
 					default_text = last_search.query,
-				})
+				}))
 			else
 				print("No previous search found!")
 			end
@@ -98,9 +122,9 @@ return {
 		-- Function to live grep with word under cursor
 		local function live_grep_word_under_cursor()
 			local word = vim.fn.expand("<cword>")
-			builtin.live_grep({
+			builtin.live_grep(scoped({
 				default_text = word,
-			})
+			}))
 		end
 
 		vim.keymap.set("n", "<leader>fg", start_live_grep, { noremap = true, silent = true })
@@ -111,7 +135,18 @@ return {
 			live_grep_word_under_cursor,
 			{ noremap = true, silent = true, desc = "Live grep word under cursor" }
 		)
-		vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find files" })
+		vim.keymap.set("n", "<leader>ff", function()
+			builtin.find_files(scoped())
+		end, { desc = "Find files (scoped to extra-addons in Odoocker)" })
+
+		-- Escape hatches: search the WHOLE project, ignoring the extra-addons scope
+		-- (e.g. when you need to read the vendored 18.0/ tree).
+		vim.keymap.set("n", "<leader>fF", function()
+			builtin.find_files()
+		end, { desc = "Find files (whole project)" })
+		vim.keymap.set("n", "<leader>fG", function()
+			builtin.live_grep()
+		end, { desc = "Live grep (whole project)" })
 
 		-- vim.keymap.set("n", "<leader>fa",
 		--     '<cmd>lua require("telescope").extensions.frecency.frecency({ sorter = require("telescope").extensions.fzf.native_fzf_sorter() })<CR>',

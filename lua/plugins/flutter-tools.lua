@@ -9,16 +9,17 @@ return {
         local keymap = vim.keymap
         local opts = { noremap = true, silent = true }
 
-        -- flutter run -d web-server --web-port=3000
+        -- This project (mobile/) has no web/ directory, so `-d web-server` could never
+        -- build -- it printed "not configured to build on the web", then hung waiting for
+        -- a Dart debug extension that never connects. Plain `:FlutterRun` is no good
+        -- either: it fails when more than one device is connected. :FlutterDevices
+        -- prompts for a device and runs on the one picked.
+        opts.desc = "Flutter run (pick device)"
+        keymap.set({ "n", "v" }, "<leader>rf", "<cmd>FlutterDevices<CR>", opts)
 
-        -- '<cmd>FlutterRun -d chrome --web-browser-flag=--disable-web-security --web-port=3002<CR>',
-
-        keymap.set({ "n", "v" }, '<leader>rf',
-            '<cmd>FlutterRun -d web-server --web-port=3004<CR>',
-            opts)
-        opts.desc = "Flutter run chrome port 3004"
-        keymap.set({ "n", "v" }, "<leader>qf", "<cmd>FlutterQuit<CR>", opts)
+        -- NOTE: opts is shared and mutated, so desc must be set *before* each mapping.
         opts.desc = "Flutter quit"
+        keymap.set({ "n", "v" }, "<leader>qf", "<cmd>FlutterQuit<CR>", opts)
         local on_attach = function(_, bufnr)
             -- if client.server_capabilities.documentSymbolProvider then
             --     breadcrumb.attach(client, bufnr)
@@ -125,6 +126,10 @@ return {
                     width = 80,
                     height = 20,
                 },
+            },
+            debugger = {
+                -- run :FlutterRun / :FlutterDebug through nvim-dap
+                enabled = true,
             },
             lsp = {
                 on_attach = on_attach,

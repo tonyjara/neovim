@@ -95,6 +95,25 @@ return {
 
         },
     },
+    config = function(_, opts)
+        require("snacks").setup(opts)
+
+        -- Workaround for folke/snacks.nvim#2539: on small screens the picker
+        -- layout can produce fractional window sizes, which nvim_win_set_config
+        -- rejects ("Invalid 'height': Number is not integral"). Remove once
+        -- fixed upstream.
+        local Win = require("snacks.win")
+        local win_opts = Win.win_opts
+        function Win:win_opts()
+            local o = win_opts(self)
+            for _, k in ipairs({ "height", "width", "row", "col" }) do
+                if type(o[k]) == "number" then
+                    o[k] = math.floor(o[k] + 0.5)
+                end
+            end
+            return o
+        end
+    end,
     keys = {
         -- find
         -- { "<leader><space>", function() Snacks.picker.smart() end, desc = "Smart Find Files" },

@@ -39,6 +39,11 @@ map("n", "d", '"_d')                 -- delete without cutting
 map("n", "c", '"_c')                 -- change without cutting
 map("n", "<C-s>", "<cmd>update<CR>") -- SAVES file
 
+-- Quit the whole instance instead of suspending it (default <C-z> = SIGTSTP,
+-- which leaves the `nvim --embed` core + LSP servers orphaned in the background).
+-- `confirm qa` quits cleanly; prompts only if there are unsaved changes.
+map({ "n", "i", "v" }, "<C-z>", "<cmd>confirm qa<CR>", { desc = "Quit Neovim (kill instance)" })
+
 --VISUAL MODE REBINDS
 map("v", "d", '"_d')                      -- delete without cutting
 map("v", "c", '"_c')                      -- delete without cutting
