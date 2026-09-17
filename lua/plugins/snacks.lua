@@ -125,7 +125,15 @@ return {
         -- { "<leader>fr", function() Snacks.picker.recent() end,                                  desc = "Recent" },
 
         -- notifications
-        { "<leader>fn", function() Snacks.picker.notifications() end, desc = "Notification History", },
+        {
+            "<leader>fn",
+            function()
+                Snacks.picker.notifications({
+                    win = { preview = { wo = { wrap = true, linebreak = true, breakindent = true } } },
+                })
+            end,
+            desc = "Notification History",
+        },
         -- { "<leader>fn", function() Snacks.picker.notifications() end, desc = "Notification History", },
 
         -- { "<leader>lg", function() Snacks.lazygit.open() end,         desc = "Open Lazygit", },

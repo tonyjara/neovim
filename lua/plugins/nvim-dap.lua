@@ -31,6 +31,93 @@ return {
 
 			dap_python.setup("python3")
 
+			-- Real file buffers, most recently used first. Used to give <leader>dc
+			-- something to work from when it is pressed on a scratch buffer such as the
+			-- dashboard, the file tree or a picker.
+			local function mru_file_bufs()
+				local bufs = vim.fn.getbufinfo({ buflisted = 1 })
+				table.sort(bufs, function(a, b)
+					return (a.lastused or 0) > (b.lastused or 0)
+				end)
+				return vim.tbl_filter(function(buf)
+					return vim.bo[buf.bufnr].buftype == "" and buf.name ~= ""
+				end, bufs)
+			end
+
+			-- launch.json discovery -----------------------------------------------------
+			-- nvim-dap only reads `./.vscode/launch.json`, resolved against the cwd, and
+			-- never searches upward. Opening nvim from a subdirectory of a repo therefore
+			-- reports "No configuration found for `<filetype>`" even though the file sits a
+			-- few levels up. This provider walks up from each plausible starting point --
+			-- the current file, then the most recently used open files, then the cwd -- and
+			-- hands the first launch.json it finds to <leader>dc. The open-file fallback is
+			-- what makes <leader>dc work from the dashboard, which is a "nofile" buffer and
+			-- so carries no path of its own.
+			local function search_up(dir)
+				while dir and dir ~= "" do
+					local candidate = dir .. "/.vscode/launch.json"
+					if vim.fn.filereadable(candidate) == 1 then
+						return candidate
+					end
+					local parent = vim.fs.dirname(dir)
+					if parent == dir then
+						return nil
+					end
+					dir = parent
+				end
+			end
+
+			local function find_launch_json()
+				local starts = {}
+				local buf_path = vim.api.nvim_buf_get_name(0)
+				if buf_path ~= "" and vim.bo.buftype == "" then
+					table.insert(starts, vim.fs.dirname(buf_path))
+				else
+					for _, buf in ipairs(mru_file_bufs()) do
+						table.insert(starts, vim.fs.dirname(buf.name))
+					end
+				end
+				table.insert(starts, vim.fn.getcwd())
+				for _, dir in ipairs(starts) do
+					local found = search_up(dir)
+					if found then
+						return found
+					end
+				end
+				return nil
+			end
+
+			dap.providers.configs["launchjs.upward"] = function()
+				local path = find_launch_json()
+				-- The built-in "dap.launch.json" provider already covers the cwd itself.
+				if not path or path == vim.fn.getcwd() .. "/.vscode/launch.json" then
+					return {}
+				end
+				local ok, configs = pcall(require("dap.ext.vscode").getconfigs, path)
+				if not ok then
+					vim.notify("Can't read " .. path .. ":\n" .. configs, vim.log.levels.WARN, { title = "DAP" })
+					return {}
+				end
+				return configs
+			end
+
+			-- A session records the filetype of the buffer it was started from, and
+			-- nvim-dap will happily reuse a window whose filetype matches when it jumps to
+			-- a stop location. Starting from the dashboard would make "snacks_dashboard"
+			-- such a match, so borrow the filetype of the most recently used real file.
+			local function session_filetype()
+				if vim.bo.buftype == "" then
+					return nil
+				end
+				for _, buf in ipairs(mru_file_bufs()) do
+					local ft = vim.bo[buf.bufnr].filetype
+					if ft ~= "" then
+						return ft
+					end
+				end
+				return nil
+			end
+
 			-- Dart / Flutter -------------------------------------------------------------
 			-- Lets <leader>dc run the `type = "dart"` entries of a repo's .vscode/launch.json.
 			-- flutter-tools replaces dap.adapters.dart whenever :FlutterRun/:FlutterDebug is
@@ -216,7 +303,7 @@ return {
 				if vim.bo.filetype == "dart" then
 					register_dart_adapter()
 				end
-				dap.continue()
+				dap.continue({ filetype = session_filetype() })
 			end, opts)
 
 			-- Step Over
