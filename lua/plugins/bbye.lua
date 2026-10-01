@@ -11,6 +11,7 @@ return {
 		map("n", "<leader>bi", "<cmd>%bd|e#<cr>", opts)
 
 		opts.desc = "Close current buffer"
-		map("n", "∑", "<cmd>Bdelete<cr>", opts) --close buffer
+		map("n", "<M-w>", "<cmd>Bdelete<cr>", opts)
+		map("n", "∑", "<cmd>Bdelete<cr>", opts) -- Option+w without macos-option-as-alt
 	end,
 }

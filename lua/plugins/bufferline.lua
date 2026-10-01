@@ -8,10 +8,14 @@ return {
 		local map = vim.api.nvim_set_keymap
 		local opts = { noremap = true, silent = true }
 
-		opts.desc = "Move to previous/next buffer"
+		-- Each buffer key is bound twice: the Alt form, and the glyph macOS
+		-- composes for Option+h / Option+l when `macos-option-as-alt` is off.
+		opts.desc = "Previous buffer"
+		map("n", "<M-h>", "<Cmd>BufferLineCyclePrev<CR>", opts)
 		map("n", "˙", "<Cmd>BufferLineCyclePrev<CR>", opts)
 
-		opts.desc = "Move to previous/next buffer"
+		opts.desc = "Next buffer"
+		map("n", "<M-l>", "<Cmd>BufferLineCycleNext<CR>", opts)
 		map("n", "¬", "<Cmd>BufferLineCycleNext<CR>", opts)
 
 		opts.desc = "Split vertically and go to next buffer"
@@ -20,7 +24,7 @@ return {
 		opts.desc = "Go to definition in a split"
 		map("n", "<leader>v]", "<cmd>vsplit<CR><C-]>", opts)
 
-		-- map("n", "‘", "<cmd>vsplit<CR>", opts)
+		-- map("n", "<M-]>", "<cmd>vsplit<CR>", opts)
 
 		bufferline.setup({
 			options = {

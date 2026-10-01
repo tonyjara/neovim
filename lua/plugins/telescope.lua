@@ -12,6 +12,16 @@ return {
 	config = function()
 		local builtin = require("telescope.builtin")
 
+		-- fd skips hidden and gitignored files, which hides .env/.env.local.
+		-- Run a second fd pass that only picks up .env* files (deduped, since a
+		-- gitignore can whitelist e.g. .env.example into the first pass).
+		local find_with_env_script = [[
+{
+  fd --type f --color never . "$@"
+  fd --type f --color never --hidden --no-ignore --glob '.env*' --exclude node_modules --exclude .git "$@"
+} | awk '!seen[$0]++'
+]]
+
 		require("telescope").setup({
 			defaults = {
 				path_display = { "truncate" },
@@ -27,6 +37,13 @@ return {
 					"lazy.lock",
 					"prisma.migrations/",
 					"automatic_backups/",
+				},
+			},
+			pickers = {
+				-- Default for every find_files call, incl. `:Telescope find_files`
+				-- from the dashboard.
+				find_files = {
+					find_command = { "sh", "-c", find_with_env_script, "sh" },
 				},
 			},
 			extensions = {
@@ -87,6 +104,15 @@ return {
 			return opts
 		end
 
+		-- Apply the .env-aware command, appending search dirs as "$@" since
+		-- Telescope only appends them for fd/rg/find.
+		local function find_files_with_env(opts)
+			opts = opts or {}
+			opts.find_command = vim.list_extend({ "sh", "-c", find_with_env_script, "sh" }, opts.search_dirs or {})
+			opts.search_dirs = nil
+			builtin.find_files(opts)
+		end
+
 		-- Table to store the last search query
 		local last_search = {}
 		local function start_live_grep()
@@ -136,13 +162,13 @@ return {
 			{ noremap = true, silent = true, desc = "Live grep word under cursor" }
 		)
 		vim.keymap.set("n", "<leader>ff", function()
-			builtin.find_files(scoped())
+			find_files_with_env(scoped())
 		end, { desc = "Find files (scoped to extra-addons in Odoocker)" })
 
 		-- Escape hatches: search the WHOLE project, ignoring the extra-addons scope
 		-- (e.g. when you need to read the vendored 18.0/ tree).
 		vim.keymap.set("n", "<leader>fF", function()
-			builtin.find_files()
+			find_files_with_env()
 		end, { desc = "Find files (whole project)" })
 		vim.keymap.set("n", "<leader>fG", function()
 			builtin.live_grep()
