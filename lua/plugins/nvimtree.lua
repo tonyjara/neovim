@@ -120,7 +120,9 @@ return {
 			git = {
 				enable = true,
 				ignore = false,
-				timeout = 500,
+				-- /usr/bin/git is Apple's xcrun shim: with a cold cache (after an Xcode update) it takes ~0.5s,
+				-- and killing it at the timeout leaves vim.system() with a nil result that nvim-tree indexes and crashes on
+				timeout = 2000,
 			},
 		}
 
