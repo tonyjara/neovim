@@ -52,3 +52,8 @@ vim.opt.fo:remove("r") -- Dont comment new lines after commented line
 vim.opt.fo:remove({ "o" }) -- Dont comment new lines after commented line
 
 -- vim.opt.cmdheight = 0      -- removes pesky bottom line, but also adds a "press enter" prompt at the start
+
+-- No plugin needs the Python 3 provider: wilder and vim-visual-multi fall back to
+-- Vimscript without it. Left on, the first `:` started the python.org 3.9 first on
+-- PATH, which is x86_64 only and runs under Rosetta.
+vim.g.loaded_python3_provider = 0
